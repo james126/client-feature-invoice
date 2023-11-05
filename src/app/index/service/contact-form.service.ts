@@ -13,13 +13,17 @@ export class ContactFormService {
 	}
 
 	submitContactForm(formValues: Contact) {
+		// const body = [
+		// 	formValues,
+		// 	{ "token": token }
+		// ];
+
 		return this.http.post(this.url, formValues, {
 			headers: new HttpHeaders({'Content-Type': 'application/json'}),
 			observe: 'response',
 		}).pipe(map((res) => {
 				this.logger.log('Submitted contact form ' + res.status);
-			})
-			, catchError((error: HttpErrorResponse) => {
+			}),catchError((error: HttpErrorResponse) => {
 				this.logger.error(error);
 				return EMPTY;
 			}))

@@ -441,9 +441,15 @@
 								</div>
 							</div>
 
+							<div class="d-flex justify-content-center">
+								<re-captcha (resolved)="resolved($event)"
+											siteKey="6LfQ3_YoAAAAACTRJCY9Bc_1qEAmcsrZBmyrsN74"
+											class=""></re-captcha>
+								</div>
+
 							<div class="col-12">
 								<button class="btn btn-dark w-100 py-3" type="submit" id="submit-button"
-										(click)="onSubmit()">Submit
+										onclick="onSubmit()">Submit
 								</button>
 							</div>
 						</div>
