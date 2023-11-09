@@ -26,7 +26,7 @@ describe('HeaderComponent', () => {
 		{path: '', component: IndexComponent},
 		{path: 'index#about', component: IndexComponent},
 		{path: 'index#services', component: IndexComponent},
-		{path: 'index#contact', component: IndexComponent},
+		{path: 'index#contact.ts', component: IndexComponent},
 		//lazy loading:
 		{path: 'login', component: LoginComponent},
 		{path: 'admin', component: AdminComponent},

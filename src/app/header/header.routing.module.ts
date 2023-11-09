@@ -7,7 +7,7 @@ const routes: Routes = [
 	{path: '', component: IndexComponent},
 	{path: 'index#about', component: IndexComponent},
 	{path: 'index#services', component: IndexComponent},
-	{path: 'index#contact', component: IndexComponent},
+	{path: 'index#contact.ts', component: IndexComponent},
 	//lazy loading:
 	{path: 'login', loadChildren: () => import('../login/login.module').then(mod => mod.LoginModule)},
 	{path: 'admin', loadChildren: () => import('../admin/admin.module').then(mod => mod.AdminModule)},

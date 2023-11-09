@@ -7,25 +7,36 @@ import {Contact} from "../dto/contact";
 
 @Injectable()
 export class ContactFormService {
-	private url = environment.apiForm;
+	private apiForm = environment.apiForm;
+	private apiRecaptcha = environment.apiRecaptcha;
 
 	constructor(private http: HttpClient, private logger: NGXLogger) {
 	}
 
-	submitContactForm(formValues: Contact) {
-		// const body = [
-		// 	formValues,
-		// 	{ "token": token }
-		// ];
-
-		return this.http.post(this.url, formValues, {
+	submitContactForm(body: Contact) {
+		return this.http.post(this.apiForm, body, {
 			headers: new HttpHeaders({'Content-Type': 'application/json'}),
 			observe: 'response',
 		}).pipe(map((res) => {
-				this.logger.log('Submitted contact form ' + res.status);
+				this.logger.log('Submitted contact.ts form ' + res.status);
 			}),catchError((error: HttpErrorResponse) => {
 				this.logger.error(error);
 				return EMPTY;
 			}))
+	}
+
+	submitRecaptcha(token: String) {
+		return this.http.post(this.apiRecaptcha, token, {
+			headers: new HttpHeaders({'Content-Type': 'application/json'}),
+			observe: 'response',
+		}).pipe(map((res) => {
+			this.logger.log('Submitted recaptcha ' + res.status);
+			if (res.status != 200) {
+				throw new Error("Error submitting recaptcha to server with response: " + res.status)
+			}
+		}),catchError((error: HttpErrorResponse) => {
+			this.logger.error(error);
+			return EMPTY;
+		}))
 	}
 }

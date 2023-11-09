@@ -6,7 +6,6 @@ export const environment = {
 	apiDelete: 'http://localhost:8080/admin/delete',
 	apiLogout: 'http://localhost:8080/admin/logout',
 	serverLoggingUrl: 'http://localhost:8080/client-logging',
-	recaptcha: {
-		siteKey: '6LdXlfMoAAAAAMjGY-rJuPtmNEwaA2Gjc4uMfTjo',
-	}
+	apiRecaptcha: 'http://localhost:8080/api/recaptcha',
+	siteKey: '6LcEd_soAAAAADd0IusI1vMlLeLdwXQp7XH8W-80'
 };

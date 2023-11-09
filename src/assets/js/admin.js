@@ -8,7 +8,7 @@
 // }
 //
 // function viewNext() {
-//     const id = document.getElementById("contact-form").getAttribute("data-id");
+//     const id = document.getElementById("contact.ts-form").getAttribute("data-id");
 //     let data = {
 //         "id": id
 //     };
@@ -46,7 +46,7 @@
 // }
 //
 // function deleteForm() {
-//     const id = document.getElementById("contact-form").getAttribute("data-id");
+//     const id = document.getElementById("contact.ts-form").getAttribute("data-id");
 //     let data = {
 //         "id": id
 //     };
@@ -92,7 +92,7 @@
 //     document.getElementById("address_line1").setAttribute("value", json["address_line1"] != null ? json["address_line1"] : "N/A");
 //     document.getElementById("address_line2").setAttribute("value", json["address_line2"] != null ? json["address_line2"] : "N/A");
 //     document.getElementById("message").value = json["message"] != null ? json["message"] : "N/A";
-//     document.getElementById("contact-form").setAttribute("data-id", json["id"] > -1 ? json["id"] : "0");
+//     document.getElementById("contact.ts-form").setAttribute("data-id", json["id"] > -1 ? json["id"] : "0");
 //
 //     if (!(json["id"] > -1)){
 //         document.getElementById("city-label").innerHTML = "N/A";

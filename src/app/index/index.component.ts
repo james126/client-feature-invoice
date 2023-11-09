@@ -1,25 +1,26 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Router} from "@angular/router";
 import {OwlOptions} from 'ngx-owl-carousel-o';
+import {environment} from "../../environments/environment";
 import {ContactFormService} from "./service/contact-form.service";
-import {Contact} from '../admin/dto/contact';
+import {Contact} from './dto/contact';
+import { RecaptchaComponent } from 'ng-recaptcha';
 
 @Component({
 	selector: 'mgm-index',
 	templateUrl: './index.component.html',
 	providers: [ContactFormService]
 })
-export class IndexComponent implements OnInit {
-	captcha: string;
-	cemail: string;
-	resolved(captchaResponse: string){
-		this.captcha = captchaResponse;
-		console.log('resolved captcha with response: ' + this.captcha)
-	}
-
+export class IndexComponent implements OnInit  {
+	@ViewChild('recaptcha', {static: false, read: RecaptchaComponent}) repactcha?: RecaptchaComponent;
+	siteKey: string = environment.siteKey;
+	captchaResponse: boolean = false;
 	service: ContactFormService;
 	router: Router;
+	submitted: boolean = false;
+	contactForm!: FormGroup;
+
 	formValues = {
 		first_name: '',
 		last_name: '',
@@ -29,8 +30,7 @@ export class IndexComponent implements OnInit {
 		address_line2: '',
 		message: ''
 	};
-	submitted: boolean = false;
-	contactForm!: FormGroup;
+
 	customOptions: OwlOptions = {
 		loop: true,
 		autoplay: true,
@@ -60,8 +60,6 @@ export class IndexComponent implements OnInit {
 	constructor(service: ContactFormService, router: Router) {
 		this.service = service;
 		this.router = router;
-		this.captcha = '';
-		this.cemail = 'Secret@email.com'
 	}
 
 	ngOnInit(): void {
@@ -108,12 +106,23 @@ export class IndexComponent implements OnInit {
 		});
 	}
 
-	onSubmit() {
+	submitCaptcha(captchaResponse: string) {
+		this.service.submitRecaptcha(captchaResponse).subscribe({
+			next: (data) => {
+				this.captchaResponse = true;
+			}, error: (err) => {
+				//allow form submission anyway - errors are logged
+				this.captchaResponse = true;
+			}
+		});
+	}
+
+	submitForm() {
 		setTimeout(() => {
 			document.getElementById("submit-button")?.blur();
 		}, 500);
 
-		if (this.contactForm.valid) {
+		if (this.contactForm.valid && this.captchaResponse) {
 			const contact = new Contact();
 			contact.first_name = this.contactForm.get('first_name')!.value;
 			contact.last_name = this.contactForm.get('last_name')!.value;
@@ -122,69 +131,50 @@ export class IndexComponent implements OnInit {
 			contact.address_line1 = this.contactForm.get('address_line1')!.value;
 			contact.address_line2 = this.contactForm.get('address_line2')!.value;
 			contact.message = this.contactForm.get('message')!.value;
+
 			this.service.submitContactForm(contact).subscribe({
 				next: (data) => {
+				    this.captchaResponse = false;
+					this.repactcha?.reset();
 					this.resetForm()
 				}, error: (err) => {
 					this.submitted = true;
 				}
 			});
+		}
 	}
-}
 
-resetForm()
-{
-	this.contactForm.reset();
-	this.submitted = false;
-	this.router.navigate(['/index'], {skipLocationChange: true});
-}
+	resetForm() {
+		this.contactForm.reset();
+		this.submitted = false;
+		this.router.navigate(['/index'], {skipLocationChange: true});
+	}
 
-get
-first_name()
-{
-	return this.contactForm.get('first_name');
-}
+	get first_name() {
+		return this.contactForm.get('first_name');
+	}
 
-get
-last_name()
-{
-	return this.contactForm.get('last_name');
-}
+	get last_name() {
+		return this.contactForm.get('last_name');
+	}
 
-get
-email()
-{
-	return this.contactForm.get('email');
-}
+	get email() {
+		return this.contactForm.get('email');
+	}
 
-get
-phone()
-{
-	return this.contactForm.get('phone');
-}
+	get phone() {
+		return this.contactForm.get('phone');
+	}
 
-get
-address_line1()
-{
-	return this.contactForm.get('address_line1');
-}
+	get address_line1() {
+		return this.contactForm.get('address_line1');
+	}
 
-get
-address_line2()
-{
-	return this.contactForm.get('address_line2');
-}
+	get address_line2() {
+		return this.contactForm.get('address_line2');
+	}
 
-get
-message()
-{
-	return this.contactForm.get('message');
-}
-	//
-	// ngAfterViewInit(): void {
-	// 	var script = document.createElement('script');
-	// 	script.type = 'text/javascript';
-	// 	script.src = 'https://www.google.com/recaptcha/enterprise.js?render=6Les0vMoAAAAAB3lnrtNT22eMda7twCDOmMjBuKR';
-	// 	document.body.appendChild(script);
-	// }
+	get message() {
+		return this.contactForm.get('message');
+	}
 }
