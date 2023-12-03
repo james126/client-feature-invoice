@@ -9,10 +9,12 @@ import {FooterModule} from "./footer/footer.module";
 import {HeaderModule} from "./header/header.module";
 import {LoggerModule, NgxLoggerLevel, TOKEN_LOGGER_SERVER_SERVICE} from 'ngx-logger';
 import {ServerCustomisedService} from "./utility/ServerCustomisedService";
+import { InvoiceComponent } from './invoice/invoice.component';
 
 @NgModule({
 	declarations: [
-		AppComponent
+		AppComponent,
+  InvoiceComponent
 	],
 	imports: [
 		BrowserModule,
